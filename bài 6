@@ -1,0 +1,101 @@
+#include <stdio.h>
+#include <conio.h>
+#include<ctype.h>
+#include<stdlib.h>
+struct SinhVien
+{
+	char Masv[10];	
+	char  Hotensv[30];
+	char   Phai[10]; 
+	int    Namsinh;
+	char    Nganhhoc[30];
+	float    Kqcuoikhoa;
+	char     Xeploai[20];
+	char     Quequan[30];
+	};
+	typedef struct SinhVien SINHVIEN;
+	void TIMSV(SINHVIEN a[], int n);
+	void INGX(SINHVIEN a[], int n);
+	void Sapxep(SINHVIEN a[], int n);
+	void Nhapsv(SINHVIEN &x);
+	void NhapsvN(SINHVIEN a[], int n);
+	void Xuatsv(SINHVIEN);
+	void XuatvN(SINHVIEN a[],int n);
+inint main(){
+{ 
+  
+   int n;
+   SINHVIEN x, a[10];
+	
+        printf("\n\n\n Nhap sp luong sinh vien");
+        scanf ("%d",&n);
+        NhapsvnN(a,n);
+        XuatsvN(a,n);
+        printf("\n\n\n An phim bat ky de in DS sap xep");
+        getch();
+        Sapxep(a,n);
+        XuatsvN(a,n);
+		printf(" \n\n\n An phim bat ky de in DS Gioi_Xuatsac");
+		getch();
+		INGX(a,n);
+		printf ("\n\n\n An phim bat ky de tim SV");
+		getch();
+		TIMSV(a,n);
+		}
+void Nhapsv(SINHVIEN &x)
+{	
+    fflush (stdin);
+    printf("\nNhap Ma SV:");
+    gets(x.Masv);
+    fflush (stdin);
+    printf("\nNhap ho ten:");
+    gets(x.Hotensv);
+    fflush (stdin);
+    printf("\nNhap Phai:");
+    gets(x.Phai);
+    fflush (stdin);
+    printf("\nNhap Nganh hoc:");
+    gets(x.Nganhhoc);
+    fflush (stdin);
+    printf("\nNhap Que quan:");
+    gets(x.Quequan);
+    
+    
+    
+    do
+    {
+    	printf("\nNhap Nam sinh:");
+    	scanf("%d",&x.Namsinh);
+		} while (x.Namsinh<1900 || x.Namsinh>2000);
+		
+		  do
+    {
+    	printf("\nNhap KQ cuoikhoa:");
+    	scanf("%f",&x.Kqcuoikhoa);
+		} while (x.Namsinh<0 || x.Namsinh>4);
+		
+		fflush (stdin);
+		if (x.Kqcuoikhoa<=1.5)
+		{strcpy(x.Xeploai,"Yeu");
+		else
+	         	if (x.Kqcuoikhoa<=2.5)
+	         	{strcpy(x.Xeploai,"Trung Binh");
+	    	else     	
+    if (x.Kqcuoikhoa<=3.0)
+		{strcpy(x.Xeploai,"Kha"); 
+    else
+    if (x.Kqcuoikhoa<=3.8)
+		{strcpy(x.Xeploai,"Gioi");
+		else
+		{strcpy(x.Xeploai,"Xuat sac");
+		void void NhapsvN(SINHVIEN a[], int n)
+		{
+			for (int i=0 ; i<n; i++)
+			{
+				printf("\n Nhap sinh vien thu %d", i+1);
+				Nhapsv(a[i]);
+				}
+				
+				}
+		void Xuatsv(SINHVIEN x)
+				
