@@ -1,0 +1,300 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <cctype>
+#define MAX 100
+
+typedef struct {
+    char Masv[10];
+    char Hotensv[30];
+    char Phai[5];
+    float Diemtoan, Diemvan, DiemAV, KQHT;
+    char Xeploai[15];
+} SinhVien;
+
+void nhapMang2D(int a[MAX][MAX], int m, int n) {
+    printf("Nhap mang 2 chieu %dx%d:\n", m, n);
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            printf("a[%d][%d] = ", i, j);
+            scanf("%d", &a[i][j]);
+        }
+    }
+}
+
+void xuatMang2D(int a[MAX][MAX], int m, int n) {
+    printf("Xuat mang 2 chieu %dx%d:\n", m, n);
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            printf("%d\t", a[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void sapXepTangDan(int a[MAX][MAX], int m, int n) {
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            for (int p = i; p < m; ++p) {
+                for (int q = (p == i) ? j + 1 : 0; q < n; ++q) {
+                    if (a[i][j] > a[p][q]) {
+                        
+                        int temp = a[i][j];
+                        a[i][j] = a[p][q];
+                        a[p][q] = temp;
+                    }
+                }
+            }
+        }
+    }
+}
+
+int isSoNguyenTo(int num) {
+    if (num < 2) return 0;
+    for (int i = 2; i * i <= num; ++i) {
+        if (num % i == 0) return 0;
+    }
+    return 1;
+}
+
+int tinhTongSoNguyenToChiaHetCho3(int a[MAX][MAX], int m, int n) {
+    int sum = 0;
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (isSoNguyenTo(a[i][j]) && a[i][j] % 3 == 0) {
+                sum += a[i][j];
+            }
+        }
+    }
+    return sum;
+}
+
+void menuMang2D() {
+    int choice;
+    int m, n;
+    int a[MAX][MAX];
+
+    do {
+        printf("\n----------------------\n");
+        printf("1. Nhap/xuat mang 2 chieu\n");
+        printf("2. Sap xep mang theo thu tu tang dan\n");
+        printf("3. Tinh tong so nguyen to chia het cho 3\n");
+        printf("0. Thoat\n");
+        printf("Nhap lua chon cua ban: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Nhap so hang m: ");
+                scanf("%d", &m);
+                printf("Nhap so cot n: ");
+                scanf("%d", &n);
+                nhapMang2D(a, m, n);
+                xuatMang2D(a, m, n);
+                break;
+            case 2:
+                sapXepTangDan(a, m, n);
+                printf("Mang sau khi sap xep tang dan:\n");
+                xuatMang2D(a, m, n);
+                break;
+            case 3:
+                printf("Tong cac so nguyen to chia het cho 3: %d\n", tinhTongSoNguyenToChiaHetCho3(a, m, n));
+                break;
+            case 0:
+                printf("Thoat chuong trinh!\n");
+                break;
+            default:
+                printf("Lua chon khong hop le. Vui long nhap lai!\n");
+                break;
+        }
+    } while (choice != 0);
+}
+
+void chuanHoaChuoi(char s[]) {
+    int length = strlen(s);
+    int i, j;
+
+    
+    for (i = 0; i < length; ++i) {
+        if (s[i] != ' ' || (i > 0 && s[i - 1] != ' ')) {
+            s[j++] = s[i];
+        }
+    }
+    s[j] = '\0';
+
+    
+    for (i = 0; s[i] != '\0'; ++i) {
+        if (i == 0 || (i > 0 && s[i - 1] == ' ')) {
+            s[i] = toupper(s[i]);
+        } else {
+            s[i] = tolower(s[i]);
+        }
+    }
+}
+
+int demKyTuGiong(char s[], char ch) {
+    
+    int count = 0;
+    char chToLower = tolower(ch);
+
+    for (int i = 0; s[i] != '\0'; ++i) {
+        if (tolower(s[i]) == chToLower) {
+            ++count;
+        }
+    }
+
+    return count;
+}
+
+void menuChuoi() {
+    int choice;
+    char s[MAX], ch;
+
+    do {
+        printf("\n----------------------\n");
+        printf("1. Nhap va chuan hoa chuoi\n");
+        printf("2. Dem so lan xuat hien cua mot ky tu\n");
+        printf("0. Thoat\n");
+        printf("Nhap lua chon cua ban: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Nhap chuoi S: ");
+                getchar(); 
+                fgets(s, sizeof(s), stdin);
+                s[strcspn(s, "\n")] = '\0'; 
+                chuanHoaChuoi(s);
+                printf("Chuoi sau khi chuan hoa: %s\n", s);
+                break;
+            case 2:
+                printf("Nhap ky tu can dem: ");
+                getchar(); 
+                scanf("%c", &ch);
+                getchar(); 
+                printf("So lan xuat hien cua ky tu %c: %d\n", ch, demKyTuGiong(s, ch));
+                break;
+            case 0:
+                printf("Thoat chuong trinh!\n");
+                break;
+            default:
+                printf("Lua chon khong hop le. Vui long nhap lai!\n");
+                break;
+        }
+    } while (choice != 0);
+}
+
+void nhapDanhSachSinhVien(SinhVien danhSach[], int n) {
+    printf("Nhap danh sach sinh vien:\n");
+    for (int i = 0; i < n; ++i) {
+        printf("Nhap thong tin sinh vien thu %d:\n", i + 1);
+        printf("Masv: ");
+        scanf("%s", danhSach[i].Masv);
+        printf("Hotensv: ");
+        getchar(); 
+        fgets(danhSach[i].Hotensv, sizeof(danhSach[i].Hotensv), stdin);
+        danhSach[i].Hotensv[strcspn(danhSach[i].Hotensv, "\n")] = '\0'; 
+        printf("Phai: ");
+        scanf("%s", danhSach[i].Phai);
+        printf("Diemtoan: ");
+        scanf("%f", &danhSach[i].Diemtoan);
+        printf("Diemvan: ");
+        scanf("%f", &danhSach[i].Diemvan);
+        printf("DiemAV: ");
+        scanf("%f", &danhSach[i].DiemAV);
+        danhSach[i].KQHT = (danhSach[i].Diemtoan * 2 + danhSach[i].Diemvan * 2 + danhSach[i].DiemAV) / 5;
+        if (danhSach[i].KQHT < 1.5) strcpy(danhSach[i].Xeploai, "Yeu");
+        else if (danhSach[i].KQHT < 2.5) strcpy(danhSach[i].Xeploai, "Trung binh");
+        else if (danhSach[i].KQHT < 3.5) strcpy(danhSach[i].Xeploai, "Kha");
+        else if (danhSach[i].KQHT < 3.7) strcpy(danhSach[i].Xeploai, "Gioi");
+        else strcpy(danhSach[i].Xeploai, "Xuat sac");
+    }
+}
+
+void inDanhSachSinhVien(SinhVien danhSach[], int n) {
+    printf("Danh sach sinh vien:\n");
+    printf("%-10s %-30s %-5s %-10s %-10s %-10s %-10s %-15s\n", "Masv", "Hotensv", "Phai", "Diemtoan", "Diemvan", "DiemAV", "KQHT", "Xeploai");
+    for (int i = 0; i < n; ++i) {
+        printf("%-10s %-30s %-5s %-10.2f %-10.2f %-10.2f %-10.2f %-15s\n", danhSach[i].Masv, danhSach[i].Hotensv, danhSach[i].Phai, danhSach[i].Diemtoan, danhSach[i].Diemvan, danhSach[i].DiemAV, danhSach[i].KQHT, danhSach[i].Xeploai);
+    }
+}
+
+void sapXepSinhVienTheoKQHT(SinhVien danhSach[], int n) {
+    
+    for (int i = 0; i < n; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+            if (danhSach[i].KQHT > danhSach[j].KQHT) {
+                
+                SinhVien temp = danhSach[i];
+                danhSach[i] = danhSach[j];
+                danhSach[j] = temp;
+            }
+        }
+    }
+}
+
+void menuSinhVien() {
+    int choice;
+    int n;
+    SinhVien danhSach[MAX];
+
+    do {
+        printf("\n----------------------\n");
+        printf("1. Nhap danh sach sinh vien\n");
+        printf("2. In danh sach sinh vien theo KQHT tang dan\n");
+        printf("0. Thoat\n");
+        printf("Nhap lua chon cua ban: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Nhap so luong sinh vien: ");
+                scanf("%d", &n);
+                nhapDanhSachSinhVien(danhSach, n);
+                break;
+            case 2:
+                sapXepSinhVienTheoKQHT(danhSach, n);
+                inDanhSachSinhVien(danhSach, n);
+                break;
+            case 0:
+                printf("Thoat chuong trinh!\n");
+                break;
+            default:
+                printf("Lua chon khong hop le. Vui long nhap lai!\n");
+                break;
+        }
+    } while (choice != 0);
+}
+
+int main() {
+    int menu;
+    do {
+        printf("\n-------------------------------\n");
+        printf("1. Thao tac voi mang 2 chieu\n");
+        printf("2. Thao tac voi chuoi\n");
+        printf("3. Thao tac voi danh sach sinh vien\n");
+        printf("0. Thoat chuong trinh\n");
+        printf("Nhap lua chon cua ban: ");
+        scanf("%d", &menu);
+
+        switch (menu) {
+            case 1:
+                menuMang2D();
+                break;
+            case 2:
+                menuChuoi();
+                break;
+            case 3:
+                menuSinhVien();
+                break;
+            case 0:
+                printf("Thoat chuong trinh!\n");
+                break;
+            default:
+                printf("Lua chon khong hop le. Vui long nhap lai!\n");
+                break;
+        }
+    } while (menu != 0);
+
+    return 0;
+    }
