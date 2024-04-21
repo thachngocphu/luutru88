@@ -1,0 +1,107 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void nhapSoNguyen(FILE *file) {
+    int n;
+    printf("Nhap so luong so nguyen: ");
+    scanf("%d", &n);
+    
+    printf("Nhap cac so nguyen:\n");
+    for (int i = 0; i < n; i++) {
+        int num;
+        scanf("%d", &num);
+        fprintf(file, "%d ", num);
+    }
+}
+
+void timSoNguyenTo(FILE *inFile, FILE *outFile) {
+    int num;
+    while (fscanf(inFile, "%d", &num) != EOF) {
+        int isPrime = 1;
+        if (num <= 1) {
+            isPrime = 0;
+        } else {
+            for (int i = 2; i * i <= num; i++) {
+                if (num % i == 0) {
+                    isPrime = 0;
+                    break;
+                }
+            }
+        }
+        if (isPrime) {
+            fprintf(outFile, "%d ", num);
+        }
+    }
+}
+
+void sapXep(FILE *file) {
+    int nums[1000];
+    int count = 0;
+    while (fscanf(file, "%d", &nums[count]) != EOF) {
+        count++;
+    }
+    
+    // Sắp xếp mảng nums ở đây, ví dụ sử dụng thuật toán Bubble sort
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = 0; j < count - i - 1; j++) {
+            if (nums[j] > nums[j + 1]) {
+                int temp = nums[j];
+                nums[j] = nums[j + 1];
+                nums[j + 1] = temp;
+            }
+        }
+    }
+
+    fseek(file, 0, SEEK_SET);
+    for (int i = 0; i < count; i++) {
+        fprintf(file, "%d ", nums[i]);
+    }
+}
+
+void timKiem(FILE *file, int target, FILE *outFile) {
+    int num, found = 0;
+    while (fscanf(file, "%d", &num) != EOF) {
+        if (num == target) {
+            found = 1;
+            break;
+        }
+    }
+    if (found) {
+        fprintf(outFile, "%d found in file\n", target);
+    } else {
+        fprintf(outFile, "%d not found in file\n", target);
+    }
+}
+
+int main() {
+    FILE *inFile = fopen("songuyen.dat", "w+");
+    FILE *outFile = fopen("songto.dat", "w+");
+    FILE *sortFile = fopen("sapxep.dat", "w+");
+    FILE *searchFile = fopen("Kqtk.dat", "w+");
+
+    if (inFile == NULL || outFile == NULL || sortFile == NULL || searchFile == NULL) {
+        printf("Failed to open files\n");
+        return 1;
+    }
+
+    nhapSoNguyen(inFile);
+
+    fseek(inFile, 0, SEEK_SET);
+    timSoNguyenTo(inFile, outFile);
+
+    fseek(inFile, 0, SEEK_SET);
+    sapXep(inFile);
+
+    fseek(inFile, 0, SEEK_SET);
+    int target;
+    printf("Nhap so nguyen can tim kiem: ");
+    scanf("%d", &target);
+    timKiem(inFile, target, searchFile);
+
+    fclose(inFile);
+    fclose(outFile);
+    fclose(sortFile);
+    fclose(searchFile);
+
+    return 0;
+}
